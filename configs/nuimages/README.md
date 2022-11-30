@@ -2,6 +2,40 @@
 
 <!-- [DATASET] -->
 
+# Train
+## 单卡
+python tools/train.py configs/mask2former_poc/mask2former_r50_lsj_8x2_50e_coco.py
+
+## 多卡
+bash ./tools/dist_train.sh configs/nuimages/cascade_mask_rcnn_r50_fpn_coco-20e_1x_nuim.py 2
+
+## 后台
+nohup bash ./tools/dist_train.sh configs/mask2former_poc/mask2former_swin-s_nuimages.py 2 > /data/home/wangxu/code/mmdetection/saved_logs/poc/finetune/nuimages/swins_2_2/output.txt 2>&1 &
+
+# Downloads
+scp -r -P 22 root@10.60.170.32:/data/home/wangxu/code/mmdetection/saved_logs/poc/r50_4_1/tf_logs /home/vision/Documents/tensorboard
+
+# test
+python tools/test.py \
+    configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py \
+    checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth \
+    --show-dir faster_rcnn_r50_fpn_1x_results
+在 Pascal VOC 数据集上测试 Faster R-CNN，不保存测试结果，测试 mAP。配置文件和 checkpoint 文件 在此 。
+
+python tools/test.py \
+    configs/mask2former_poc/mask2former_swin-s_bdd100k.py \
+    checkpoints/faster_rcnn_r50_fpn_1x_voc0712_20200624-c9895d40.pth \
+    --eval mAP
+使用 8 块 GPU 测试 Mask R-CNN，测试 bbox 和 mAP 。配置文件和 checkpoint 文件 在此 。
+
+./tools/dist_test.sh \
+    configs/mask2former_poc/mask2former_swin-s_bdd100k.py \
+    saved_logs/poc/finetune/swins_2_1/latest.pth \
+    2 \
+    --eval segm
+
+
+
 ## Introduction
 
 We support and provide some baseline results on [nuImages dataset](https://www.nuscenes.org/nuimages).
@@ -18,6 +52,8 @@ The dataset converted by the script of v0.6.0 only supports instance segmentatio
 python -u tools/data_converter/nuimage_converter.py --data-root ${DATA_ROOT} --version ${VERSIONS} \
                                                     --out-dir ${OUT_DIR} --nproc ${NUM_WORKERS} --extra-tag ${TAG}
 ```
+python -u tools/data_converter/nuimage_converter.py --data-root /data/home/ljl/Datasets/ch_poc/nuImages/nuimages-v1.0-all-metadata --version v1.0-val --out-dir /data/home/ljl/Datasets/ch_poc/nuImages/annotations/ 
+
 
 - `--data-root`: the root of the dataset, defaults to `./data/nuimages`.
 - `--version`: the version of the dataset, defaults to `v1.0-mini`. To get the full dataset, please use `--version v1.0-train v1.0-val v1.0-mini`

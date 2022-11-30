@@ -1,5 +1,5 @@
 dataset_type = 'CocoDataset'
-data_root = 'data/nuimages/'
+data_root = '/data/home/ljl/Datasets/ch_poc/nuImages/'
 class_names = [
     'car', 'truck', 'trailer', 'bus', 'construction_vehicle', 'bicycle',
     'motorcycle', 'pedestrian', 'traffic_cone', 'barrier'
@@ -36,24 +36,24 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=2,
-    workers_per_gpu=2,
+    samples_per_gpu=1,
+    workers_per_gpu=1,
     train=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/nuimages_v1.0-train.json',
-        img_prefix=data_root,
+        img_prefix=data_root + 'nuimages-v1.0-all-samples/',
         classes=class_names,
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/nuimages_v1.0-val.json',
-        img_prefix=data_root,
+        img_prefix=data_root + 'nuimages-v1.0-all-samples/',
         classes=class_names,
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/nuimages_v1.0-val.json',
-        img_prefix=data_root,
+        img_prefix=data_root + 'nuimages-v1.0-all-samples/',
         classes=class_names,
         pipeline=test_pipeline))
 evaluation = dict(metric=['bbox', 'segm'])
