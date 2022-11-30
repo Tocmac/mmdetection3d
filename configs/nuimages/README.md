@@ -10,7 +10,7 @@ python tools/train.py configs/mask2former_poc/mask2former_r50_lsj_8x2_50e_coco.p
 bash ./tools/dist_train.sh configs/nuimages/cascade_mask_rcnn_r50_fpn_coco-20e_1x_nuim.py 2
 
 ## 后台
-nohup bash ./tools/dist_train.sh configs/mask2former_poc/mask2former_swin-s_nuimages.py 2 > /data/home/wangxu/code/mmdetection/saved_logs/poc/finetune/nuimages/swins_2_2/output.txt 2>&1 &
+nohup bash ./tools/dist_train.sh configs/nuimages/cascade_mask_rcnn_r50_fpn_coco-20e_1x_nuim.py 2 > /data/home/wangxu/code/mmdetection3d/saved_logs/poc/finetune/nuimages/CMRC_2_1/output.txt 2>&1 &
 
 # Downloads
 scp -r -P 22 root@10.60.170.32:/data/home/wangxu/code/mmdetection/saved_logs/poc/r50_4_1/tf_logs /home/vision/Documents/tensorboard
